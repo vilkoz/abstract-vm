@@ -2,9 +2,9 @@
 #include <stdio.h>
 #include <string>
 
-extern "C" FILE		*yyin;
-extern "C" int		yylex(void);
-extern "C" char		*yytext;
+extern FILE		*yyin;
+extern int		yylex(void);
+extern char		*yytext;
 
 Lexer::Lexer(void)
 {
@@ -39,20 +39,32 @@ Lexer::Lexer(int ac, char **av)
 	}
 }
 
-sLexeme::sLexeme(std::string &s, eLexeme type): type(type), msg(s)
+sLexeme::sLexeme(eLexeme type, const std::string *s): type(type), msg(s)
 {
+}
+
+sLexeme::~sLexeme(void)
+{
+	/* delete msg; */
+	//TODO: fix leaks
 }
 
 std::list<sLexeme>		Lexer::getTokens(void)
 {
 	std::list<sLexeme>		l;
 	eLexeme					token;
-	std::string				tmp;
+	std::string				*tmp;
 
-	while ((token = static_cast<eLexeme>(yylex())))
+	while ((token = static_cast<eLexeme>(yylex())) && token != ERROR)
 	{
-		tmp = std::string(yytext);
-		l.push_back(static_cast<sLexeme>(sLexeme(tmp, token)));
+		if (token == EOL)
+			_lineNum++;
+		tmp = new std::string(yytext);
+		l.push_back(sLexeme(token,
+			const_cast<const std::string*>(new std::string(tmp->c_str()))));
+		delete tmp;
 	}
+	if (token == ERROR)
+		throw std::invalid_argument("Illegal instruction!");
 	return (l);
 }

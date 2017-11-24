@@ -4,7 +4,7 @@ VPATH = src
 
 CC = clang++
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -std=c++11 -Wall -Wextra -Werror -Wno-sign-compare -g
 
 SRCS = main.cpp					\
 	   Lexer.cpp				\
@@ -12,23 +12,25 @@ SRCS = main.cpp					\
 
 BIN_DIR = bin/
 
-BINS = $(addprefix, $(SRCS:.cpp=.o))
-
-$(BIN_DIR)%.o: %.cpp
-	$(CC) $(FLAGS) -c -o $@ $<
-
-src/FreeLexer.cpp: flex/FreeLexer.l
-	flex -o $@ $<
+BINS = $(addprefix $(BIN_DIR), $(SRCS:.cpp=.o))
 
 all: $(NAME)
 
 $(NAME): $(BINS)
 	$(CC) $(FLAGS) $(BINS) -o $(NAME)
 
+$(BIN_DIR)%.o: %.cpp
+	@mkdir -p $(shell dirname $@)
+	$(CC) $(FLAGS) -c -o $@ $<
+
+src/FreeLexer.cpp: flex/FreeLexer.l
+	flex -o $@ $<
+
 clean:
-	/bin/rm -f $(BIN_DIR)
+	/bin/rm -rf $(BIN_DIR)
+	/bin/rm -f src/FreeLexer.cpp
 
 fclean: clean
 	/bin/rm -f $(NAME)
 
-re: fclean re
+re: fclean all

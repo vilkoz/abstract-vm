@@ -6,23 +6,30 @@
 %option noinput
 %option nounput
 
-%x BEGIN_INT8 BEGIN_INT16 BEGIN_INT32 BEGIN_FLOAT BEGIN_DOBULE
+%x BEGIN_INT8 BEGIN_INT16 BEGIN_INT32 BEGIN_FLOAT BEGIN_DOUBLE END_TYPE
 
 %%
 
 [ \t]										;
-"\n"											{ return EOL; }
+"\n"										{ return EOL; }
 "int8("										{ BEGIN(BEGIN_INT8); }
 "int16("									{ BEGIN(BEGIN_INT16); }
 "int32("									{ BEGIN(BEGIN_INT32); }
 "float("									{ BEGIN(BEGIN_FLOAT); }
-"double("									{ BEGIN(BEGIN_DOBULE); }
+"double("									{ BEGIN(BEGIN_DOUBLE); }
 
-<BEGIN_INT8>[+-]?[0-9]+\)					{ BEGIN(INITIAL); return INT8; }
-<BEGIN_INT16>[+-]?[0-9]+\)					{ BEGIN(INITIAL); return INT16; }
-<BEGIN_INT32>[+-]?[0-9]+\)					{ BEGIN(INITIAL); return INT32; }
-<BEGIN_FLOAT>[+-]?[0-9]+\.[0-9]+\)			{ BEGIN(INITIAL); return FLOAT; }
-<BEGIN_DOBULE>[+-]?[0-9]+\.[0-9]+\)			{ BEGIN(INITIAL); return DOUBLE; }
+<BEGIN_INT8>[+-]?[0-9]+						{ BEGIN(END_TYPE); return INT8; }
+<BEGIN_INT8>.								{ return ERROR; }
+<BEGIN_INT16>[+-]?[0-9]+					{ BEGIN(END_TYPE); return INT16; }
+<BEGIN_INT16>.								{ return ERROR; }
+<BEGIN_INT32>[+-]?[0-9]+					{ BEGIN(END_TYPE); return INT32; }
+<BEGIN_INT32>.								{ return ERROR; }
+<BEGIN_FLOAT>[+-]?[0-9]+\.?[0-9]+			{ BEGIN(END_TYPE); return FLOAT; }
+<BEGIN_FLOAT>.								{ return ERROR; }
+<BEGIN_DOUBLE>[+-]?[0-9]+\.?[0-9]+			{ BEGIN(END_TYPE); return DOUBLE; }
+<BEGIN_DOUBLE>.								{ return ERROR; }
+<END_TYPE>\)								{ BEGIN(INITIAL); }
+<END_TYPE>.									{ return (ERROR); }
 
 push										{ return PUSH; }
 pop											{ return POP; }

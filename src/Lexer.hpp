@@ -17,6 +17,7 @@ class Lexer
 	private:
 		Lexer (void);
 		Lexer (Lexer const &copy);
+		int		_lineNum;
 };
 
 #endif

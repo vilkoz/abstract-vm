@@ -6,7 +6,7 @@
 /*   By: vitaliirybalko <vrybalko@student.uni       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 16:05:31 by vitaliir          #+#    #+#             */
-/*   Updated: 2017/11/24 16:08:20 by vitaliir         ###   ########.fr       */
+/*   Updated: 2017/11/24 17:33:45 by vitaliir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ int			main(int argc, char *argv[])
 {
 	try {
 		Lexer				lexer(argc, argv);
-		std::list<sLexeme>	l;
+		std::list<sLexeme>	lexemes = lexer.getTokens();
 
-		l = lexer.getTokens();
 	} catch(std::invalid_argument &e) {
 		std::cout << e.what() << std::endl;
 		return (1);

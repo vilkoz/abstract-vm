@@ -37,9 +37,10 @@ enum	eLexeme
 
 struct sLexeme
 {
-	sLexeme(std::string&, eLexeme);
-	eLexeme				type;
-	std::string			&msg;
+	sLexeme(eLexeme, const std::string *);
+	~sLexeme();
+	eLexeme					type;
+	const std::string		*msg;
 };
 
 #endif
