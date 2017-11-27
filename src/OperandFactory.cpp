@@ -26,7 +26,7 @@ OperandFactory			&OperandFactory::operator=(OperandFactory const &copy)
 }
 
 void					OperandFactory::checkOverflow(eOperandType type,
-							std::string const &value)
+							std::string const &value) const
 {
 	if (type == Int8)
 	{
@@ -68,6 +68,34 @@ IOperand const			*OperandFactory::createOperand(eOperandType type,
 IOperand const			*OperandFactory::createInt8(std::string const &value) const
 {
 	checkOverflow(Int8, value);
-	auto	res = stoi(value);
-	return (new TOperand<char>(res));
+	auto	res = std::stoi(value);
+	return (new TOperand<char>(Int8, static_cast<char>(res)));
+}
+
+IOperand const			*OperandFactory::createInt16(std::string const &value) const
+{
+	checkOverflow(Int16, value);
+	auto	res = std::stoi(value);
+	return (new TOperand<short>(Int16, static_cast<short>(res)));
+}
+
+IOperand const			*OperandFactory::createInt32(std::string const &value) const
+{
+	checkOverflow(Int32, value);
+	auto	res = std::stoi(value);
+	return (new TOperand<int>(Int32, static_cast<int>(res)));
+}
+
+IOperand const			*OperandFactory::createFloat(std::string const &value) const
+{
+	checkOverflow(Float, value);
+	auto	res = std::stof(value);
+	return (new TOperand<float>(Float, static_cast<float>(res)));
+}
+
+IOperand const			*OperandFactory::createDouble(std::string const &value) const
+{
+	checkOverflow(Float, value);
+	auto	res = std::stod(value);
+	return (new TOperand<double>(Double, static_cast<double>(res)));
 }

@@ -27,7 +27,7 @@ class OperandFactory
 
 	private:
 		void					checkOverflow(eOperandType type,
-									std::string const &value);
+									std::string const &value) const;
 		IOperand const			*(OperandFactory::*_operands[5])(
 									std::string const &value) const;
 };

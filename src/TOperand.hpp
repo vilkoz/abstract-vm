@@ -2,6 +2,9 @@
 # define TOPERAND_HPP
 
 # include "IOperand.hpp"
+# include "OperandFactory.hpp"
+# include <sstream>
+# include <iomanip>
 
 template<typename T>
 class TOperand: public IOperand
@@ -12,9 +15,14 @@ public:
 		*this = copy;
 	}
 
-	TOperand (T const &value)
+	TOperand (eOperandType const &type, T const &value): _type(type), _value(value)
 	{
-		_value = value;
+		if (type < Float)
+			_precision = 0;
+		else if (type == Float)
+			_precision = 16;
+		else
+			_precision = 32;
 	}
 
 	TOperand (void): _value(0) {};
@@ -28,18 +36,128 @@ public:
 
 	int					getPrecision( void ) const
 	{
+		return (_type);
+	}
 
-	};
-	eOperandType		getType( void ) const;
-	char const			*operator+( char const & rhs ) const;
-	char const			*operator-( char const & rhs ) const;
-	char const			*operator*( char const & rhs ) const;
-	char const			*operator/( char const & rhs ) const;
-	char const			*operator%( char const & rhs ) const;
-	std::string const	&toString( void ) const;
+	eOperandType		getType( void ) const
+	{
+		return (_type);
+	}
+
+	IOperand const				*operator+( IOperand const & rhs ) const
+	{
+		OperandFactory		o;
+		eOperandType		type = std::max(_type, rhs.getType());
+
+		if (type < Float)
+		{
+			auto					val = std::stoll(toString()) + std::stoll(rhs.toString());
+			std::stringstream		s;
+
+			s << std::setprecision(0) << val;
+			return (o.createOperand(type, s.str()));
+		}
+		auto					val = std::stod(toString()) + std::stod(rhs.toString());
+		std::stringstream		s;
+
+		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
+		return (o.createOperand(type, s.str()));
+	}
+
+	IOperand const				*operator-( IOperand const & rhs ) const
+	{
+		OperandFactory		o;
+		eOperandType		type = std::max(_type, rhs.getType());
+
+		if (type < Float)
+		{
+			auto					val = std::stoll(toString()) - std::stoll(rhs.toString());
+			std::stringstream		s;
+
+			s << std::setprecision(0) << val;
+			return (o.createOperand(type, s.str()));
+		}
+		auto					val = std::stod(toString()) - std::stod(rhs.toString());
+		std::stringstream		s;
+
+		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
+		return (o.createOperand(type, s.str()));
+	}
+
+	IOperand const				*operator*( IOperand const & rhs ) const
+	{
+		OperandFactory		o;
+		eOperandType		type = std::max(_type, rhs.getType());
+
+		if (type < Float)
+		{
+			auto					val = std::stoll(toString()) * std::stoll(rhs.toString());
+			std::stringstream		s;
+
+			s << std::setprecision(0) << val;
+			return (o.createOperand(type, s.str()));
+		}
+		auto					val = std::stod(toString()) * std::stod(rhs.toString());
+		std::stringstream		s;
+
+		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
+		return (o.createOperand(type, s.str()));
+	}
+
+	IOperand const				*operator/( IOperand const & rhs ) const
+	{
+		OperandFactory		o;
+		eOperandType		type = std::max(_type, rhs.getType());
+
+		if (type < Float)
+		{
+			auto					val = std::stoll(toString()) / std::stoll(rhs.toString());
+			std::stringstream		s;
+
+			s << std::setprecision(0) << val;
+			return (o.createOperand(type, s.str()));
+		}
+		auto					val = std::stod(toString()) / std::stod(rhs.toString());
+		std::stringstream		s;
+
+		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
+		return (o.createOperand(type, s.str()));
+	}
+
+	IOperand const				*operator%( IOperand const & rhs ) const
+	{
+		OperandFactory		o;
+		eOperandType		type = std::max(_type, rhs.getType());
+
+		if (type < Float)
+		{
+			auto					val = std::stoll(toString()) % std::stoll(rhs.toString());
+			std::stringstream		s;
+
+			s << std::setprecision(0) << val;
+			return (o.createOperand(type, s.str()));
+		}
+		auto					val = std::stod(toString()) % std::stod(rhs.toString());
+		std::stringstream		s;
+
+		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
+		return (o.createOperand(type, s.str()));
+	}
+
+	std::string const	&toString( void ) const
+	{
+		std::stringstream		s;
+
+		s << std::setprecision(_precision) << _value;
+		_str = s.str();
+		return (_str);
+	}
 
 private:
+	eOperandType		_type;
+	int					_precision;
 	T					_value;
+	std::string			_str;
 };
 
 #endif
