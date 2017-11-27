@@ -57,6 +57,8 @@ std::list<sLexeme>		Lexer::getTokens(void)
 
 	while ((token = static_cast<eLexeme>(yylex())) && token != ERROR)
 	{
+		if (token == END_OF_FILE)
+			break ;
 		if (token == EOL)
 			_lineNum++;
 		tmp = new std::string(yytext);

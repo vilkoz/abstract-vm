@@ -14,7 +14,6 @@ enum	eOperandType
 
 enum	eLexeme
 {
-		END_OF_FILE,
 		INT8,
 		INT16,
 		INT32,
@@ -32,6 +31,7 @@ enum	eLexeme
 		PRINT,
 		EXIT,
 		ERROR,
+		END_OF_FILE,
 		EOL
 };
 
