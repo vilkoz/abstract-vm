@@ -5,6 +5,7 @@
 # include <cfloat>
 # include <cstdint>
 # include <cstdlib>
+# include <string>
 # include "Types.hpp"
 # include "IOperand.hpp"
 
