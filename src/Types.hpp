@@ -3,6 +3,9 @@
 
 # include <iostream>
 
+# define NUM_OPERANDS	5
+# define NUM_OPERATIONS	11
+
 enum	eOperandType
 {
 		Int8,

@@ -137,27 +137,25 @@ public:
 			s << std::setprecision(0) << val;
 			return (o.createOperand(type, s.str()));
 		}
-		auto					val = std::stod(toString()) % std::stod(rhs.toString());
-		std::stringstream		s;
-
-		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
-		return (o.createOperand(type, s.str()));
+		throw std::invalid_argument("Can't mod doubles!");
+		return (NULL);
 	}
 
 	std::string const	&toString( void ) const
 	{
 		std::stringstream		s;
+		std::string				*tmp;
 
-		s << std::setprecision(_precision) << _value;
-		_str = s.str();
-		return (_str);
+		s << std::setprecision(_precision) << +_value;
+		tmp = new std::string(s.str());
+		return (*tmp);
 	}
 
 private:
 	eOperandType		_type;
 	int					_precision;
 	T					_value;
-	std::string			_str;
+	std::string			*_str;
 };
 
 #endif

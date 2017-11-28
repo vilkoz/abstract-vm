@@ -8,6 +8,7 @@ FLAGS = -std=c++11 -Wall -Wextra -Werror -Wno-sign-compare -g
 
 SRCS = main.cpp					\
 	   Lexer.cpp				\
+	   Parser.cpp				\
 	   FreeLexer.cpp			\
 	   OperandFactory.cpp
 

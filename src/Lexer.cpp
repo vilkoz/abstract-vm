@@ -55,13 +55,17 @@ std::list<sLexeme>		Lexer::getTokens(void)
 	eLexeme					token;
 	std::string				*tmp;
 
-	while ((token = static_cast<eLexeme>(yylex())) && token != ERROR)
+	while ((token = static_cast<eLexeme>(yylex())) != END_OF_FILE
+			&& token != ERROR)
 	{
-		if (token == END_OF_FILE)
-			break ;
 		if (token == EOL)
 			_lineNum++;
 		tmp = new std::string(yytext);
+		if (token == 0 && *tmp == std::string(""))
+		{
+			delete tmp;
+			break ;
+		}
 		l.push_back(sLexeme(token,
 			const_cast<const std::string*>(new std::string(tmp->c_str()))));
 		delete tmp;
