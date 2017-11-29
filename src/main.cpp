@@ -6,7 +6,7 @@
 /*   By: vitaliirybalko <vrybalko@student.uni       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/24 16:05:31 by vitaliir          #+#    #+#             */
-/*   Updated: 2017/11/29 17:02:11 by vitaliir         ###   ########.fr       */
+/*   Updated: 2017/11/30 01:07:46 by vrybalko         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int			main(int argc, char *argv[])
 
 	} catch(std::exception &e) {
 		std::cout << e.what() << std::endl;
-		return (1);
+		return (0);
 	}
 	return (0);
 }

@@ -84,8 +84,6 @@ void			Parser::dump(std::list<sLexeme>::iterator &it)
 	it++;
 	if (it->type != EOL)
 		throw std::invalid_argument("Wrong Syntax!");
-	if (_stack.empty())
-		throw std::invalid_argument("Pop on empty stack!");
 	for (auto i = _stack.rbegin(); i != _stack.rend(); ++i)
 		std::cout << (*i)->toString() << std::endl;
 }
@@ -97,9 +95,9 @@ void			Parser::assert(std::list<sLexeme>::iterator &it)
 		throw std::invalid_argument("Wrong Syntax!");
 	if (_stack.empty())
 		throw std::invalid_argument("Pop on empty stack!");
-	auto	value = _stack.end();
+	auto	value = _stack.back();
 	_stack.pop_back();
-	if (*it->msg != (*value)->toString())
+	if (*it->msg != (value)->toString())
 		throw std::logic_error("Assertion error!");
 	it++;
 	if (it->type != EOL)
