@@ -3,3 +3,4 @@
 *.o
 src/FreeLexer.cpp
 avm
+test/out
