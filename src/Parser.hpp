@@ -51,10 +51,8 @@ class Parser
 		throw std::invalid_argument("Pop on empty stack!");						\
 	auto	v2 = _stack.back();													\
 	_stack.pop_back();															\
-	auto	res = (*v1) op (*v2);												\
-	_stack.push_back(_operandFactory.createOperand(								\
-				static_cast<eOperandType>(res->getType()),						\
-				res->toString()));												\
+	IOperand const		*res = (*v1) op (*v2);									\
+	_stack.push_back(res);														\
 }																				\
 
 #endif

@@ -52,12 +52,16 @@ public:
 
 	TOperand (eOperandType const &type, T const &value): _type(type), _value(value)
 	{
+		std::stringstream		s;
+
 		if (type < Float)
 			_precision = 0;
 		else if (type == Float)
 			_precision = 16;
 		else
 			_precision = 32;
+		s << std::setprecision(_precision) << +_value;
+		_str = s.str();
 	}
 
 	TOperand (void): _value(0) {};
@@ -119,14 +123,9 @@ public:
 		return (_o.createOperand(type, s.str()));
 	}
 
-	std::string const				&toString( void ) const
+	std::string const			&toString( void ) const
 	{
-		std::stringstream		s;
-		std::string				*tmp;
-
-		s << std::setprecision(_precision) << +_value;
-		tmp = new std::string(s.str());
-		return (*tmp);
+		return (_str);
 	}
 
 private:
@@ -134,7 +133,7 @@ private:
 	eOperandType		_type;
 	int					_precision;
 	T					_value;
-	std::string			*_str;
+	std::string			_str;
 };
 
 #endif

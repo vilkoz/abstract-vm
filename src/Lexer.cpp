@@ -12,6 +12,8 @@ Lexer::Lexer(void)
 
 Lexer::~Lexer(void)
 {
+	while (!_l.empty())
+		_l.pop_back();
 }
 
 Lexer::Lexer (Lexer const &copy)
@@ -45,13 +47,11 @@ sLexeme::sLexeme(eLexeme type, const std::string *s): type(type), msg(s)
 
 sLexeme::~sLexeme(void)
 {
-	/* delete msg; */
-	//TODO: fix leaks
 }
 
-std::list<sLexeme>		Lexer::getTokens(void)
+std::list<sLexeme>		&Lexer::getTokens(void)
 {
-	std::list<sLexeme>		l;
+	/* std::list<sLexeme>		l; */
 	eLexeme					token;
 	std::string				*tmp;
 
@@ -66,11 +66,11 @@ std::list<sLexeme>		Lexer::getTokens(void)
 			delete tmp;
 			break ;
 		}
-		l.push_back(sLexeme(token,
+		_l.push_back(sLexeme(token,
 			const_cast<const std::string*>(new std::string(tmp->c_str()))));
 		delete tmp;
 	}
 	if (token == ERROR)
 		throw std::invalid_argument("Illegal instruction!");
-	return (l);
+	return (_l);
 }
