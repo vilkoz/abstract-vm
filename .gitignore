@@ -4,3 +4,5 @@
 src/FreeLexer.cpp
 avm
 test/out
+test/test.log
+vgcore.*
