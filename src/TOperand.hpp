@@ -6,6 +6,34 @@
 # include <sstream>
 # include <iomanip>
 
+# define OPERATOR_FOR_FLOAT(op, rhs, type, s) \
+{																				\
+		s << std::setprecision(													\
+				std::max(getPrecision(), rhs.getPrecision()))					\
+			<< std::stod(toString()) op std::stod(rhs.toString());				\
+}																				\
+
+# define OPERATOR_NOT_FOR_FLOAT(op, rhs, type, s) \
+{																				\
+throw std::invalid_argument("Can't perform this operator for float or double");	\
+}																				\
+
+# define RUN_OPERATOR(op, rhs, type, s, float_macro) \
+	{																			\
+		type = std::max(_type, rhs.getType());									\
+																				\
+		if (type < Float)														\
+		{																		\
+			s << std::setprecision(0)											\
+				<< std::stoll(toString()) op std::stoll(rhs.toString());		\
+			return (_o.createOperand(type, s.str()));							\
+		}																		\
+		else																	\
+		{																		\
+			float_macro(op, rhs, type, s);										\
+		}																		\
+	}
+
 template<typename T>
 class TOperand: public IOperand
 {
@@ -46,102 +74,45 @@ public:
 
 	IOperand const				*operator+( IOperand const & rhs ) const
 	{
-		OperandFactory		o;
-		eOperandType		type = std::max(_type, rhs.getType());
-
-		if (type < Float)
-		{
-			auto					val = std::stoll(toString()) + std::stoll(rhs.toString());
-			std::stringstream		s;
-
-			s << std::setprecision(0) << val;
-			return (o.createOperand(type, s.str()));
-		}
-		auto					val = std::stod(toString()) + std::stod(rhs.toString());
-		std::stringstream		s;
-
-		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
-		return (o.createOperand(type, s.str()));
+		eOperandType		type;
+		std::stringstream	s;
+		RUN_OPERATOR(+, rhs, type, s, OPERATOR_FOR_FLOAT);
+		return (_o.createOperand(type, s.str()));
 	}
 
 	IOperand const				*operator-( IOperand const & rhs ) const
 	{
-		OperandFactory		o;
-		eOperandType		type = std::max(_type, rhs.getType());
-
-		if (type < Float)
-		{
-			auto					val = std::stoll(toString()) - std::stoll(rhs.toString());
-			std::stringstream		s;
-
-			s << std::setprecision(0) << val;
-			return (o.createOperand(type, s.str()));
-		}
-		auto					val = std::stod(toString()) - std::stod(rhs.toString());
-		std::stringstream		s;
-
-		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
-		return (o.createOperand(type, s.str()));
+		eOperandType		type;
+		std::stringstream	s;
+		RUN_OPERATOR(-, rhs, type, s, OPERATOR_FOR_FLOAT);
+		return (_o.createOperand(type, s.str()));
 	}
 
 	IOperand const				*operator*( IOperand const & rhs ) const
 	{
-		OperandFactory		o;
-		eOperandType		type = std::max(_type, rhs.getType());
-
-		if (type < Float)
-		{
-			auto					val = std::stoll(toString()) * std::stoll(rhs.toString());
-			std::stringstream		s;
-
-			s << std::setprecision(0) << val;
-			return (o.createOperand(type, s.str()));
-		}
-		auto					val = std::stod(toString()) * std::stod(rhs.toString());
-		std::stringstream		s;
-
-		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
-		return (o.createOperand(type, s.str()));
+		eOperandType		type;
+		std::stringstream	s;
+		RUN_OPERATOR(*, rhs, type, s, OPERATOR_FOR_FLOAT);
+		return (_o.createOperand(type, s.str()));
 	}
 
 	IOperand const				*operator/( IOperand const & rhs ) const
 	{
-		OperandFactory		o;
-		eOperandType		type = std::max(_type, rhs.getType());
-
-		if (type < Float)
-		{
-			auto					val = std::stoll(toString()) / std::stoll(rhs.toString());
-			std::stringstream		s;
-
-			s << std::setprecision(0) << val;
-			return (o.createOperand(type, s.str()));
-		}
-		auto					val = std::stod(toString()) / std::stod(rhs.toString());
-		std::stringstream		s;
-
-		s << std::setprecision(std::max(getPrecision(), rhs.getPrecision())) << val;
-		return (o.createOperand(type, s.str()));
+		eOperandType		type;
+		std::stringstream	s;
+		RUN_OPERATOR(/, rhs, type, s, OPERATOR_FOR_FLOAT);
+		return (_o.createOperand(type, s.str()));
 	}
 
 	IOperand const				*operator%( IOperand const & rhs ) const
 	{
-		OperandFactory		o;
-		eOperandType		type = std::max(_type, rhs.getType());
-
-		if (type < Float)
-		{
-			auto					val = std::stoll(toString()) % std::stoll(rhs.toString());
-			std::stringstream		s;
-
-			s << std::setprecision(0) << val;
-			return (o.createOperand(type, s.str()));
-		}
-		throw std::invalid_argument("Can't mod doubles!");
-		return (NULL);
+		eOperandType		type;
+		std::stringstream	s;
+		RUN_OPERATOR(%, rhs, type, s, OPERATOR_NOT_FOR_FLOAT);
+		return (_o.createOperand(type, s.str()));
 	}
 
-	std::string const	&toString( void ) const
+	std::string const				&toString( void ) const
 	{
 		std::stringstream		s;
 		std::string				*tmp;
@@ -152,6 +123,7 @@ public:
 	}
 
 private:
+	OperandFactory		_o;
 	eOperandType		_type;
 	int					_precision;
 	T					_value;

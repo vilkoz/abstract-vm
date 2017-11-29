@@ -104,24 +104,6 @@ void			Parser::assert(std::list<sLexeme>::iterator &it)
 
 void			Parser::add(std::list<sLexeme>::iterator &it)
 {
-	/* it++; */
-	/* if (it->type > NUM_OPERANDS) */
-	/* 	throw std::invalid_argument("Wrong Syntax!"); */
-	/* if (_stack.empty()) */
-	/* 	throw std::invalid_argument("Pop on empty stack!"); */
-	/* auto	v1 = _stack.end(); */
-	/* _stack.pop_back(); */
-	/* if (_stack.empty()) */
-	/* 	throw std::invalid_argument("Pop on empty stack!"); */
-	/* auto	v2 = _stack.end(); */
-	/* _stack.pop_back(); */
-	/* auto	res = *const_cast<IOperand*>(*v1) + *const_cast<IOperand*>(*v2); */
-	/* _stack.push_back(_operandFactory.createOperand( */
-	/* 			static_cast<eOperandType>(res->getType()), */
-	/* 			res->toString())); */
-	/* it++; */
-	/* if (it->type != EOL) */
-	/* 	throw std::invalid_argument("Wrong Syntax!"); */
 	DO_OPERATOR_CHECKS(+, it);
 }
 
