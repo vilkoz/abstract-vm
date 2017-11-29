@@ -45,13 +45,13 @@ class Parser
 		throw std::invalid_argument("Wrong Syntax!");							\
 	if (_stack.empty())															\
 		throw std::invalid_argument("Pop on empty stack!");						\
-	auto	v1 = _stack.end(); v1--;											\
+	auto	v1 = _stack.back();													\
 	_stack.pop_back();															\
 	if (_stack.empty())															\
 		throw std::invalid_argument("Pop on empty stack!");						\
-	auto	v2 = _stack.end(); v2--;											\
+	auto	v2 = _stack.back();													\
 	_stack.pop_back();															\
-	auto	res = *const_cast<IOperand*>(*v1) op *const_cast<IOperand*>(*v2);	\
+	auto	res = (*v1) op (*v2);												\
 	_stack.push_back(_operandFactory.createOperand(								\
 				static_cast<eOperandType>(res->getType()),						\
 				res->toString()));												\

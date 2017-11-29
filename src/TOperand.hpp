@@ -8,9 +8,12 @@
 
 # define OPERATOR_FOR_FLOAT(op, rhs, type, s) \
 {																				\
+		auto	v1 = toString();												\
+		auto	v2 = rhs.toString();											\
+																				\
 		s << std::setprecision(													\
 				std::max(getPrecision(), rhs.getPrecision()))					\
-			<< std::stod(toString()) op std::stod(rhs.toString());				\
+			<< std::stod(v1) op std::stod(v2);									\
 }																				\
 
 # define OPERATOR_NOT_FOR_FLOAT(op, rhs, type, s) \
@@ -24,9 +27,13 @@ throw std::invalid_argument("Can't perform this operator for float or double");	
 																				\
 		if (type < Float)														\
 		{																		\
+			auto	v1 = toString();											\
+			auto	v2 = rhs.toString();										\
+			if ((std::string( #op ) == "%" || std::string( #op ) == "/")		\
+				&& std::stoll(v2) == 0)											\
+				throw std::invalid_argument("Division by zero!");				\
 			s << std::setprecision(0)											\
-				<< std::stoll(toString()) op std::stoll(rhs.toString());		\
-			return (_o.createOperand(type, s.str()));							\
+				<< std::stoll(v1) op std::stoll(v2);							\
 		}																		\
 		else																	\
 		{																		\
