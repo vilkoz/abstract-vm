@@ -1,0 +1,6 @@
+;110883
+push int32(12230352)
+push int32(12341235)
+sub
+dump
+exit

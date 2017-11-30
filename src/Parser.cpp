@@ -46,7 +46,7 @@ void			Parser::parse(void)
 		num = it->type - NUM_OPERANDS;
 		if (num < 0)
 			throw std::invalid_argument("Wrong Syntax!");
-		if (num >= NUM_OPERANDS + NUM_OPERATIONS)
+		if (num >= NUM_OPERATIONS)
 			continue ;
 		(this->*_operations[num])(it);
 		if (_exit)

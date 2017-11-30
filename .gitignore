@@ -2,7 +2,7 @@
 *.swo
 *.o
 src/FreeLexer.cpp
-avm
+/avm
 test/out
 test/test.log
 vgcore.*

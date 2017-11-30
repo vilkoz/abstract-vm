@@ -1,0 +1,4 @@
+;Char overflow or underflow
+push int16(600)
+print
+exit

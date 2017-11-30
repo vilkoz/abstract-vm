@@ -10,6 +10,8 @@ endif
 
 TEST_LOG = test.log
 
+ECHO = /bin/echo -e -n
+
 OK_STRING=$(OK_COLOR)[OK]$(NO_COLOR)
 ERROR_STRING=$(ERROR_COLOR)[ERRORS]$(NO_COLOR)
 
@@ -50,17 +52,17 @@ $(OUT_DIR)%.txt: %.avm
 	@echo -n "$<: "
 	@OUT1=`diff $@ $(EXPECTED_DIR)$(shell basename $@)`; \
 	if [ -z "$$OUT1" ]; then \
-		echo -en $(OK_STRING); \
+		$(ECHO) $(OK_STRING); \
 	else \
-		echo -en $(ERROR_STRING); \
+		$(ECHO) $(ERROR_STRING); \
 		echo "$<: " >> $(TEST_LOG); \
 		echo $$OUT1 >> $(TEST_LOG); \
 	fi; \
 	OUT2=""; \
 	if [ -z "$$OUT2" ]; then \
-		echo -en $(OK_STRING); \
+		$(ECHO) $(OK_STRING); \
 	else \
-		echo -en $(ERROR_STRING); \
+		$(ECHO) $(ERROR_STRING); \
 		echo "$<: " >> $(TEST_LOG); \
 		echo $$OUT2 >> $(TEST_LOG); \
 	fi; \
