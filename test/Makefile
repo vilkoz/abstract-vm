@@ -2,15 +2,16 @@ ifeq ($(shell uname -s),Linux)
 	NO_COLOR="\033[0m"
 	OK_COLOR="\033[0;32m"
 	ERROR_COLOR="\033[0;31m"
+	ECHO_COLOR = /bin/echo -e -n
 else
-	NO_COLOR="\x1b[0m"
-	OK_COLOR="\x1b[32;01m"
-	ERROR_COLOR="\x1b[31;01m"
+	NO_COLOR="\033[0m"
+	OK_COLOR="\033[0;32m"
+	ERROR_COLOR="\033[0;31m"
+	ECHO_COLOR = printf
 endif
 
 TEST_LOG = test.log
 
-ECHO = /bin/echo -e -n
 
 OK_STRING=$(OK_COLOR)[OK]$(NO_COLOR)
 ERROR_STRING=$(ERROR_COLOR)[ERRORS]$(NO_COLOR)
@@ -49,20 +50,20 @@ $(OUT_DIR)%.txt: %.avm
 	@#OUT2=`valgrind --leak-check=full ../avm $< 2>&1 | grep -E 'lost in loss record|Invalid read of size|SIG.*'`;
 	@mkdir -p $(shell dirname $@)
 	@../avm $< > $@
-	@echo -n "$<: "
+	@printf "$<: "
 	@OUT1=`diff $@ $(EXPECTED_DIR)$(shell basename $@)`; \
 	if [ -z "$$OUT1" ]; then \
-		$(ECHO) $(OK_STRING); \
+		$(ECHO_COLOR) $(OK_STRING); \
 	else \
-		$(ECHO) $(ERROR_STRING); \
+		$(ECHO_COLOR) $(ERROR_STRING); \
 		echo "$<: " >> $(TEST_LOG); \
 		echo $$OUT1 >> $(TEST_LOG); \
 	fi; \
 	OUT2=`valgrind --leak-check=full ../avm $< 2>&1 | grep -E 'lost in loss record|Invalid read of size|SIG.*'`; \
 	if [ -z "$$OUT2" ]; then \
-		$(ECHO) $(OK_STRING); \
+		$(ECHO_COLOR) $(OK_STRING); \
 	else \
-		$(ECHO) $(ERROR_STRING); \
+		$(ECHO_COLOR) $(ERROR_STRING); \
 		echo "$<: " >> $(TEST_LOG); \
 		echo $$OUT2 >> $(TEST_LOG); \
 	fi; \
