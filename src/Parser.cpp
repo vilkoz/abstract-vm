@@ -7,9 +7,10 @@ Parser::Parser(void)
 Parser::~Parser(void)
 {
 	while (!_stack.empty())
+	{
+		delete _stack.back();
 		_stack.pop_back();
-	/* while (!_lexemes.empty()) */
-	/* 	_lexemes.pop_back(); */
+	}
 }
 
 Parser::Parser (Parser const &copy)
@@ -76,6 +77,7 @@ void			Parser::pop(std::list<sLexeme>::iterator &it)
 		throw std::invalid_argument("Wrong Syntax!");
 	if (_stack.empty())
 		throw std::invalid_argument("Pop on empty stack!");
+	delete _stack.back();
 	_stack.pop_back();
 }
 
@@ -96,7 +98,6 @@ void			Parser::assert(std::list<sLexeme>::iterator &it)
 	if (_stack.empty())
 		throw std::invalid_argument("Pop on empty stack!");
 	auto	value = _stack.back();
-	_stack.pop_back();
 	if (*it->msg != (value)->toString())
 		throw std::logic_error("Assertion error!");
 	it++;

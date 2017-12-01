@@ -52,6 +52,8 @@ class Parser
 	auto	v2 = _stack.back();													\
 	_stack.pop_back();															\
 	IOperand const		*res = (*v1) op (*v2);									\
+	delete v1;																	\
+	delete v2;																	\
 	_stack.push_back(res);														\
 }																				\
 

@@ -13,7 +13,10 @@ Lexer::Lexer(void)
 Lexer::~Lexer(void)
 {
 	while (!_l.empty())
+	{
+		delete (_l.back()).msg;
 		_l.pop_back();
+	}
 }
 
 Lexer::Lexer (Lexer const &copy)

@@ -58,7 +58,7 @@ $(OUT_DIR)%.txt: %.avm
 		echo "$<: " >> $(TEST_LOG); \
 		echo $$OUT1 >> $(TEST_LOG); \
 	fi; \
-	OUT2=""; \
+	OUT2=`valgrind --leak-check=full ../avm $< 2>&1 | grep -E 'lost in loss record|Invalid read of size|SIG.*'`; \
 	if [ -z "$$OUT2" ]; then \
 		$(ECHO) $(OK_STRING); \
 	else \
