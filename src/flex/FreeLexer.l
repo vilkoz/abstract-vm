@@ -24,12 +24,14 @@
 <BEGIN_INT16>.								{ return ERROR; }
 <BEGIN_INT32>[+-]?[0-9]+					{ BEGIN(END_TYPE); return INT32; }
 <BEGIN_INT32>.								{ return ERROR; }
-<BEGIN_FLOAT>[+-]?[0-9]+\.?[0-9]+			{ BEGIN(END_TYPE); return FLOAT; }
+<BEGIN_FLOAT>[+-]?[0-9]+(\.[0-9]+)?			{ BEGIN(END_TYPE); return FLOAT; }
 <BEGIN_FLOAT>.								{ return ERROR; }
-<BEGIN_DOUBLE>[+-]?[0-9]+\.?[0-9]+			{ BEGIN(END_TYPE); return DOUBLE; }
+<BEGIN_DOUBLE>[+-]?[0-9]+(\.[0-9]+)?		{ BEGIN(END_TYPE); return DOUBLE; }
 <BEGIN_DOUBLE>.								{ return ERROR; }
-<END_TYPE>\)								{ BEGIN(INITIAL); }
-<END_TYPE>.									{ return (ERROR); }
+<END_TYPE>"\n"								{ return ERROR; }
+<END_TYPE>[ \t]+							;
+<END_TYPE>\)$								{ BEGIN(INITIAL); }
+<END_TYPE>.+								{ return (ERROR); }
 
 push										{ return PUSH; }
 pop											{ return POP; }

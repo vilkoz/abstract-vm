@@ -5,12 +5,16 @@
 # include "OperandFactory.hpp"
 # include <sstream>
 # include <iomanip>
+# include <cmath>
 
 # define OPERATOR_FOR_FLOAT(op, rhs, type, s) \
 {																				\
 		auto	v1 = toString();												\
 		auto	v2 = rhs.toString();											\
 																				\
+		if ((std::string( #op ) == "/")											\
+			&& std::abs(std::stof(v2)) < 0.0000001)								\
+			throw std::invalid_argument("Division by zero!");					\
 		s << std::setprecision(													\
 				std::max(getPrecision(), rhs.getPrecision()))					\
 			<< std::stod(v1) op std::stod(v2);									\
