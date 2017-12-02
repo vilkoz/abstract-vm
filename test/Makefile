@@ -17,23 +17,27 @@ ERROR_STRING=$(ERROR_COLOR)[ERRORS]$(NO_COLOR)
 
 VPATH = avm/
 
-TESTS = 01_test.avm		\
-		02_test.avm		\
-		03_test.avm		\
-		04_test.avm		\
-		05_test.avm		\
-		06_add_int.avm	\
-		07_sub_int.avm	\
-		08_mul_int.avm	\
-		09_div_int.avm	\
+TESTS = 01_test.avm				\
+		02_test.avm				\
+		03_test.avm				\
+		04_test.avm				\
+		05_test.avm				\
+		06_add_int.avm			\
+		07_sub_int.avm			\
+		08_mul_int.avm			\
+		09_div_int.avm			\
 		10_div_int_by_zero.avm	\
-		11_mod_int.avm	\
+		11_mod_int.avm			\
 		11_mod_int_by_zero.avm	\
-		12_pop.avm		\
-		13_print.avm	\
+		12_pop.avm				\
+		13_print.avm			\
 		14_print_not_char.avm	\
 		15_print_invalid.avm	\
-		16_assert.avm	\
+		16_assert.avm			\
+		17_error_unknow_instruction.avm \
+		18_error_invalid_format.avm	\
+		19_float_no_dot.avm		\
+		20_double_no_dot.avm	\
 
 REAL_TESTS = $(TESTS)
 
@@ -58,7 +62,7 @@ $(OUT_DIR)%.txt: %.avm
 		echo "$<: " >> $(TEST_LOG); \
 		echo $$OUT1 >> $(TEST_LOG); \
 	fi; \
-	OUT2=`valgrind --leak-check=full ../avm $< 2>&1 | grep -E 'lost in loss record|Invalid read of size|SIG.*'`; \
+	OUT2=`valgrind --leak-check=full ../avm $< 2>&1 | grep -v 'possibly lost' | grep -E -A5 'lost in loss record|Invalid read of size|SIG.*'`; \
 	if [ -z "$$OUT2" ]; then \
 		$(ECHO) $(OK_STRING); \
 	else \
