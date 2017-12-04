@@ -38,6 +38,9 @@ TESTS = 01_test.avm				\
 		18_error_invalid_format.avm	\
 		19_float_no_dot.avm		\
 		20_double_no_dot.avm	\
+		21_comment_after_push.avm	\
+		22_int_with_dot.avm		\
+		23_double_with_multiple_dots.avm
 
 REAL_TESTS = $(TESTS)
 
@@ -50,7 +53,7 @@ EXPECTED_DIR = expected/
 all: $(OUTS)
 
 $(OUT_DIR)%.txt: %.avm
-	@#OUT2=`valgrind --leak-check=full ../avm $< 2>&1 | grep -E 'lost in loss record|Invalid read of size|SIG.*'`;
+	@#OUT2=`valgrind --leak-check=full ../avm $< 2>&1 | grep -v 'possibly lost' | grep -E -A5 'lost in loss record|Invalid read of size|SIG.*'`;
 	@mkdir -p $(shell dirname $@)
 	@../avm $< > $@
 	@echo -n "$<: "

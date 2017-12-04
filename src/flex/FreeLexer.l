@@ -30,8 +30,8 @@
 <BEGIN_DOUBLE>.								{ return ERROR; }
 <END_TYPE>"\n"								{ return ERROR; }
 <END_TYPE>[ \t]+							;
-<END_TYPE>\)$								{ BEGIN(INITIAL); }
-<END_TYPE>.+								{ return (ERROR); }
+<END_TYPE>\)								{ BEGIN(INITIAL); }
+<END_TYPE>. 								{ return (ERROR); }
 
 push										{ return PUSH; }
 pop											{ return POP; }
