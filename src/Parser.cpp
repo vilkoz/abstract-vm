@@ -92,14 +92,27 @@ void			Parser::dump(std::list<sLexeme>::iterator &it)
 
 void			Parser::assert(std::list<sLexeme>::iterator &it)
 {
+	eOperandType	type;
+
 	it++;
 	if (it->type > NUM_OPERANDS)
 		throw std::invalid_argument("Wrong Syntax!");
 	if (_stack.empty())
 		throw std::invalid_argument("Pop on empty stack!");
 	auto	value = _stack.back();
-	if (*it->msg != (value)->toString())
-		throw std::logic_error("Assertion error!");
+	type = std::max(reinterpret_cast<eOperandType&>(it->type),
+			value->getType());
+	if (type < Float)
+	{
+		if (*it->msg != (value)->toString())
+			throw std::logic_error("Assertion error!");
+	}
+	else
+	{
+		auto diff = std::stod(*it->msg) - std::stod((value)->toString());
+		if (std::abs(diff) > 0.0001)
+			throw std::logic_error("Assertion error!");
+	}
 	it++;
 	if (it->type != EOL)
 		throw std::invalid_argument("Wrong Syntax!");

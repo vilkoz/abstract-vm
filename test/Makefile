@@ -40,7 +40,8 @@ TESTS = 01_test.avm				\
 		20_double_no_dot.avm	\
 		21_comment_after_push.avm	\
 		22_int_with_dot.avm		\
-		23_double_with_multiple_dots.avm
+		23_double_with_multiple_dots.avm \
+		24_assert_on_float.avm
 
 REAL_TESTS = $(TESTS)
 
